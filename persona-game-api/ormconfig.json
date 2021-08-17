@@ -2,10 +2,10 @@
   "name": "default",
   "type": "mysql",
   "host": "localhost",
-  "port": 5431,
+  "port": 5444,
   "username": "root",
   "password": "pass",
-  "database": "persona-game-api",
+  "database": "persona-game-db",
   "migrations": ["src/database/migrations/*.ts"],
   "entities": ["src/entities/*.ts"],
   "cli": {
