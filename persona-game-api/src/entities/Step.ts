@@ -1,4 +1,12 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 import { Phase } from "./Phase";
 
@@ -6,6 +14,9 @@ import { Phase } from "./Phase";
 export class Step {
   @PrimaryGeneratedColumn("increment")
   readonly id: number;
+
+  @Column()
+  phase_id: number;
 
   @JoinColumn({ name: "phase_id" })
   @ManyToOne(() => Phase, (phase) => phase.steps)
