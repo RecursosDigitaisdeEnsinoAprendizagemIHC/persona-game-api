@@ -1,4 +1,12 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 import { Step } from "./Step";
 import { User } from "./User";
@@ -8,9 +16,13 @@ export class UserFinishedStep {
   @PrimaryGeneratedColumn("increment")
   readonly id: number;
 
+  @Column({ name: "user_id" })
+  userId: number;
+
   @JoinColumn({ name: "user_id" })
   user: User;
-  
+
+  @ManyToOne(() => Step, (step) => step.users_finished_step)
   @JoinColumn({ name: "step_id" })
   step: Step;
 
