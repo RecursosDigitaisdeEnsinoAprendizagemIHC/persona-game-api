@@ -1,10 +1,12 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class CreateUserStepsLog1629224096475 implements MigrationInterface {
+export class CreateUserAnsweredQuestions1629850886772
+  implements MigrationInterface
+{
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "user_steps_log",
+        name: "user_answered_questions",
         columns: [
           {
             name: "id",
@@ -18,13 +20,8 @@ export class CreateUserStepsLog1629224096475 implements MigrationInterface {
             type: "int",
           },
           {
-            name: "step_id",
+            name: "question_id",
             type: "int",
-          },
-          {
-            name: "current_step",
-            type: "boolean",
-            default: true,
           },
           {
             name: "created_at",
@@ -39,13 +36,7 @@ export class CreateUserStepsLog1629224096475 implements MigrationInterface {
         ],
         foreignKeys: [
           {
-            name: "FKStepUserStepsLog",
-            referencedTableName: "steps",
-            referencedColumnNames: ["id"],
-            columnNames: ["step_id"],
-          },
-          {
-            name: "FKUserUserStepsLog",
+            name: "FKUserUserAnsweredQuestions",
             referencedTableName: "users",
             referencedColumnNames: ["id"],
             columnNames: ["user_id"],
@@ -56,6 +47,6 @@ export class CreateUserStepsLog1629224096475 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("user_steps_log");
+    await queryRunner.dropTable("user_answered_questions");
   }
 }
