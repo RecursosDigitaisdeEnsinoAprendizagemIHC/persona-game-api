@@ -7,7 +7,9 @@ export const userFinishedStepService = async (userId) => {
     UserFinishedStepRepository
   );
 
-  const availableSteps = await userFinishedStepRepository.findAllByUser(userId);
+  const userFinishedSteps = await userFinishedStepRepository.findAllByUser(
+    userId
+  );
 
-  return availableSteps;
+  return userFinishedSteps;
 };
