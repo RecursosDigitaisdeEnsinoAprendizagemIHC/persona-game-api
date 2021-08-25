@@ -22,6 +22,9 @@ export class UserFinishedStep {
   @JoinColumn({ name: "user_id" })
   user: User;
 
+  @Column({ name: "step_id" })
+  stepId: number;
+
   @ManyToOne(() => Step, (step) => step.users_finished_step)
   @JoinColumn({ name: "step_id" })
   step: Step;

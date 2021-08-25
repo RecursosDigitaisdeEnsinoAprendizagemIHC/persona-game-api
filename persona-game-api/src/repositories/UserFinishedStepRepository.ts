@@ -11,4 +11,16 @@ export class UserFinishedStepRepository extends Repository<UserFinishedStep> {
       relations: ["step"],
     });
   }
+
+  findLastStepByUser(userId) {
+    return this.findOne({
+      where: {
+        userId,
+      },
+      relations: ["step"],
+      order: {
+        stepId: "DESC",
+      },
+    });
+  }
 }
