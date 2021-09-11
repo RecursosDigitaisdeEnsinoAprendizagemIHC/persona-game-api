@@ -5,6 +5,7 @@ import { CreateUserController } from "./controllers/CreateUserController";
 import { ListPhasesController } from "./controllers/ListPhases";
 import { ListUserFinishedStepsController } from "./controllers/ListUserFinishedStepsController";
 import { StartStepController } from "./controllers/StartStepController";
+import { CheckQuestionAnswerController } from "./controllers/CheckQuestionAnswerController";
 
 export const router = Router();
 
@@ -13,6 +14,7 @@ const authUserController = new AuthUserController();
 const listPhasesController = new ListPhasesController();
 const listUserFinishedStepsController = new ListUserFinishedStepsController();
 const startStepController = new StartStepController();
+const checkQuestionAnswerController = new CheckQuestionAnswerController();
 
 router.post("/users", createUserController.handle);
 
@@ -25,3 +27,8 @@ router.get(
   listUserFinishedStepsController.handle
 );
 router.get("/step/:id/start", ensureAuthenticated, startStepController.handle);
+router.get(
+  "/question/:id/check",
+  ensureAuthenticated,
+  checkQuestionAnswerController.handle
+);
