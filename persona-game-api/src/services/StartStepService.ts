@@ -12,7 +12,7 @@ export const startStepService = async (userId, stepId) => {
   const lastFinishedStep = await userFinishedStepRepository.findLastStepByUser(
     userId
   );
-  if (stepId > lastFinishedStep.stepId + 1) {
+  if (lastFinishedStep && stepId > lastFinishedStep.stepId + 1) {
     throw new Error("You don't have this step unlocked yet!");
   }
 
