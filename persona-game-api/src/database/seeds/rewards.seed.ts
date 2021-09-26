@@ -42,3 +42,24 @@ export const RewardSeed = [
       "Aprender o conteúdo apresentado; um jogo desafiador, divertido e satisfatório; um jogo que prenda minha atenção; e conteúdo abordado relevante.",
   },
 ];
+
+export const MedalRewardSeed = [
+  {
+    type: "TIME_MEDAL",
+    name: "Tempo de resposta",
+    description:
+      "Recompensa atrelada a velocidade de resposta das questões de uma etapa.",
+  },
+  {
+    type: "QUESTION_COMBO_MEDAL",
+    name: "Combo de acerto",
+    description:
+      "Recompensa atrelada ao combo de acertos das questões de uma etapa.",
+  },
+  {
+    type: "STEP_COMBO_MEDAL",
+    name: "Combo de etapas",
+    description:
+      "Recompensa atrelada ao combo de sucesso em etapas sem falhar.",
+  },
+];

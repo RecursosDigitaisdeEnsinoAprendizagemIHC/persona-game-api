@@ -35,7 +35,8 @@ export const checkStepAnswersService = async (
   };
 
   // check time to finish
-  const finishedInTime = await stepFinishedInTime(userId);
+  const finishedTime = moment();
+  const finishedInTime = await stepFinishedInTime(userId, finishedTime);
   if (!finishedInTime.success) return result;
 
   let answeredQuestions = await checkQuestionsAnswers(
@@ -65,20 +66,19 @@ export const checkStepAnswersService = async (
   return result;
 };
 
-const stepFinishedInTime = async (userId) => {
+const stepFinishedInTime = async (userId, finishedTime) => {
   const userStepsLogRepository = getCustomRepository(UserStepsLogRepository);
 
-  const now = moment();
   const stepLog = await userStepsLogRepository.findOne({
     userId,
     current_step: true,
   });
   const startTime = moment(stepLog.created_at);
-  const minutesToComplete = now.diff(startTime, "minutes", true);
+  const secondsToComplete = finishedTime.diff(startTime, "seconds", true);
 
   return {
-    success: minutesToComplete <= MINUTES_TO_FINISH_STEP,
-    timeToFinish: minutesToComplete,
+    success: Math.floor(secondsToComplete / 60) <= MINUTES_TO_FINISH_STEP,
+    timeToFinish: secondsToComplete,
   };
 };
 
