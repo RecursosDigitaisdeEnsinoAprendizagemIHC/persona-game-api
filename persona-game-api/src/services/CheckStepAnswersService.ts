@@ -5,6 +5,8 @@ import { getQuestionAnswer } from "../apis/games-qa/getQuestionAnswerService";
 import { UserStepsLogRepository } from "../repositories/UserStepsLogRepository";
 import { UserFinishedStepRepository } from "../repositories/UserFinishedStepRepository";
 import { UserAnsweredQuestionsRepository } from "../repositories/UserAnsweredQuestionsRepository";
+import { UserHasRewardRepository } from "../repositories/UserHasRewardRepository";
+import { getStepRewardService } from "./GetStepRewardService";
 
 interface IAnswer {
   questionId: number;
@@ -55,6 +57,9 @@ export const checkStepAnswersService = async (
 
     result.success = true;
     // check if a reward should be sent
+    const userRewards = await getStepRewardService(stepId);
+    result.rewards = userRewards;
+    await giveUserRewards(userId, userRewards);
   }
 
   return result;
@@ -101,4 +106,19 @@ const checkQuestionsAnswers = async (
   }
 
   return answeredQuestions;
+};
+
+const giveUserRewards = async (userId, rewards) => {
+  const userHasRewards = [];
+  const userHasRewardRepository = getCustomRepository(UserHasRewardRepository);
+
+  for (let reward of rewards) {
+    const userHasReward = userHasRewardRepository.create({
+      userId,
+      rewardId: reward.id,
+    });
+    userHasRewards.push(userHasReward);
+  }
+
+  userHasRewardRepository.save(userHasRewards);
 };

@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 import { User } from "./User";
 import { Reward } from "./Reward";
@@ -8,8 +15,14 @@ export class UserHasReward {
   @PrimaryGeneratedColumn("increment")
   readonly id: number;
 
+  @Column({ name: "user_id" })
+  userId: number;
+
   @JoinColumn({ name: "user_id" })
   user: User;
+
+  @Column({ name: "reward_id" })
+  rewardId: number;
 
   @JoinColumn({ name: "reward_id" })
   reward: Reward;
