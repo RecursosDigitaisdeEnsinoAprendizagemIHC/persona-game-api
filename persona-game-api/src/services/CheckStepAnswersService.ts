@@ -7,6 +7,7 @@ import { UserFinishedStepRepository } from "../repositories/UserFinishedStepRepo
 import { UserAnsweredQuestionsRepository } from "../repositories/UserAnsweredQuestionsRepository";
 import { UserHasRewardRepository } from "../repositories/UserHasRewardRepository";
 import { getStepRewardService } from "./GetStepRewardService";
+import { QuestionComboRepository } from "../repositories/QuestionComboRepository";
 
 interface IAnswer {
   questionId: number;
@@ -87,6 +88,13 @@ const checkQuestionsAnswers = async (
   answers,
   userAnswerdQuestionsRepository
 ) => {
+  const questionComboRepository = getCustomRepository(QuestionComboRepository);
+
+  let userQuestionCombo = await questionComboRepository.findOne({ userId });
+  if (!userQuestionCombo) {
+    userQuestionCombo = questionComboRepository.create({ userId, combo: 0 });
+  }
+
   const answeredQuestions = [];
   for (let answer of answers) {
     const { questionId, optionAnswer } = answer;
@@ -102,8 +110,13 @@ const checkQuestionsAnswers = async (
         userId,
       });
       answeredQuestions.push(answeredQuestion);
+
+      userQuestionCombo.combo += 1;
+    } else {
+      userQuestionCombo.combo = 0;
     }
   }
+  await questionComboRepository.save(userQuestionCombo);
 
   return answeredQuestions;
 };
