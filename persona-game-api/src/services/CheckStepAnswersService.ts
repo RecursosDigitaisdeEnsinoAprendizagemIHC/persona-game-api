@@ -9,6 +9,7 @@ import { UserHasRewardRepository } from "../repositories/UserHasRewardRepository
 import { getStepRewardService } from "./GetStepRewardService";
 import { QuestionComboRepository } from "../repositories/QuestionComboRepository";
 import { StepComboRepository } from "../repositories/StepComboRepository";
+import { getMedalRewardService } from "./GetMedalRewardService";
 
 interface IAnswer {
   questionId: number;
@@ -47,11 +48,12 @@ export const checkStepAnswersService = async (
     userAnswerdQuestionsRepository
   );
 
+  let finishedStep;
   if (answeredQuestions.length >= MIN_CORRECT_ANSWERS) {
     for (let obj of answeredQuestions) {
       await userAnswerdQuestionsRepository.save(obj);
     }
-    const finishedStep = userFinishedStepRepository.create({
+    finishedStep = userFinishedStepRepository.create({
       stepId,
       userId,
       time_to_finish: finishedInTime.timeToFinish,
@@ -68,6 +70,9 @@ export const checkStepAnswersService = async (
 
   await updateStepCombo(userId, result.success);
 
+  const medalRewards = await getMedalRewardService(userId, finishedStep);
+  result.rewards = [...result.rewards, ...medalRewards];
+
   return result;
 };
 
@@ -79,7 +84,9 @@ const stepFinishedInTime = async (userId, finishedTime) => {
     current_step: true,
   });
   const startTime = moment(stepLog.created_at);
-  const secondsToComplete = finishedTime.diff(startTime, "seconds", true);
+  const secondsToComplete = Math.floor(
+    finishedTime.diff(startTime, "seconds", true)
+  );
 
   return {
     success: Math.floor(secondsToComplete / 60) <= MINUTES_TO_FINISH_STEP,
