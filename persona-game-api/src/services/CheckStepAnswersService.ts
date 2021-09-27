@@ -8,6 +8,7 @@ import { UserAnsweredQuestionsRepository } from "../repositories/UserAnsweredQue
 import { UserHasRewardRepository } from "../repositories/UserHasRewardRepository";
 import { getStepRewardService } from "./GetStepRewardService";
 import { QuestionComboRepository } from "../repositories/QuestionComboRepository";
+import { StepComboRepository } from "../repositories/StepComboRepository";
 
 interface IAnswer {
   questionId: number;
@@ -58,11 +59,14 @@ export const checkStepAnswersService = async (
     await userFinishedStepRepository.save(finishedStep);
 
     result.success = true;
+
     // check if a reward should be sent
     const userRewards = await getStepRewardService(stepId);
     result.rewards = userRewards;
     await giveUserRewards(userId, userRewards);
   }
+
+  await updateStepCombo(userId, result.success);
 
   return result;
 };
@@ -134,4 +138,21 @@ const giveUserRewards = async (userId, rewards) => {
   }
 
   userHasRewardRepository.save(userHasRewards);
+};
+
+const updateStepCombo = async (userId, success) => {
+  const stepComboRepository = getCustomRepository(StepComboRepository);
+
+  let userStepCombo = await stepComboRepository.findOne({ userId });
+  if (!userStepCombo) {
+    userStepCombo = stepComboRepository.create({ userId, combo: 0 });
+  }
+
+  if (success) {
+    userStepCombo.combo += 1;
+  } else {
+    userStepCombo.combo = 0;
+  }
+
+  await stepComboRepository.save(userStepCombo);
 };
