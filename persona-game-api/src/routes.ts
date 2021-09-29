@@ -8,6 +8,7 @@ import { StartStepController } from "./controllers/StartStepController";
 import { CheckQuestionAnswerController } from "./controllers/CheckQuestionAnswerController";
 import { CheckStepAnswersController } from "./controllers/CheckStepAnswersController";
 import { ListRewardsController } from "./controllers/ListRewardsController";
+import { GetUserRewardsController } from "./controllers/GetUserRewardsController";
 
 export const router = Router();
 
@@ -19,6 +20,7 @@ const listRewardsController = new ListRewardsController();
 const startStepController = new StartStepController();
 const checkQuestionAnswerController = new CheckQuestionAnswerController();
 const checkStepAnswersController = new CheckStepAnswersController();
+const getUserRewardsController = new GetUserRewardsController();
 
 router.post("/users", createUserController.handle);
 
@@ -42,3 +44,4 @@ router.get(
   checkQuestionAnswerController.handle
 );
 router.get("/rewards", ensureAuthenticated, listRewardsController.handle);
+router.get("/my_rewards", ensureAuthenticated, getUserRewardsController.handle);
