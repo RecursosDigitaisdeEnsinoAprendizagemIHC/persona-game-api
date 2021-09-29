@@ -7,6 +7,7 @@ import { ListUserFinishedStepsController } from "./controllers/ListUserFinishedS
 import { StartStepController } from "./controllers/StartStepController";
 import { CheckQuestionAnswerController } from "./controllers/CheckQuestionAnswerController";
 import { CheckStepAnswersController } from "./controllers/CheckStepAnswersController";
+import { ListRewardsController } from "./controllers/ListRewardsController";
 
 export const router = Router();
 
@@ -14,6 +15,7 @@ const createUserController = new CreateUserController();
 const authUserController = new AuthUserController();
 const listPhasesController = new ListPhasesController();
 const listUserFinishedStepsController = new ListUserFinishedStepsController();
+const listRewardsController = new ListRewardsController();
 const startStepController = new StartStepController();
 const checkQuestionAnswerController = new CheckQuestionAnswerController();
 const checkStepAnswersController = new CheckStepAnswersController();
@@ -39,3 +41,4 @@ router.get(
   ensureAuthenticated,
   checkQuestionAnswerController.handle
 );
+router.get("/rewards", ensureAuthenticated, listRewardsController.handle);
