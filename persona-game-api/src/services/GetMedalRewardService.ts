@@ -42,7 +42,7 @@ const getAnswerTimeReward = async (userId, finishedStep) => {
   const rewardType = "TIME_MEDAL";
 
   const reward = await rewardRepository.findOne({ type: rewardType });
-  let userHasReward = await userHasRewardRepository.findOne({
+  const userHasReward = await userHasRewardRepository.findOne({
     userId,
     rewardId: reward.id,
   });
@@ -85,7 +85,7 @@ const getQuestionComboReward = async (userId) => {
   const rewardType = "QUESTION_COMBO_MEDAL";
 
   const reward = await rewardRepository.findOne({ type: rewardType });
-  let userHasReward = await userHasRewardRepository.findOne({
+  const userHasReward = await userHasRewardRepository.findOne({
     userId,
     rewardId: reward.id,
   });
@@ -120,7 +120,7 @@ const getStepComboReward = async (userId) => {
   const rewardType = "STEP_COMBO_MEDAL";
 
   const reward = await rewardRepository.findOne({ type: rewardType });
-  let userHasReward = await userHasRewardRepository.findOne({
+  const userHasReward = await userHasRewardRepository.findOne({
     userId,
     rewardId: reward.id,
   });

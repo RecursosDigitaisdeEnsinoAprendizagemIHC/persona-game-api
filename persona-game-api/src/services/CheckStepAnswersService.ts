@@ -42,7 +42,7 @@ export const checkStepAnswersService = async (
   const finishedInTime = await stepFinishedInTime(userId, finishedTime);
   if (!finishedInTime.success) return result;
 
-  let answeredQuestions = await checkQuestionsAnswers(
+  const answeredQuestions = await checkQuestionsAnswers(
     userId,
     answers,
     userAnswerdQuestionsRepository
@@ -50,7 +50,7 @@ export const checkStepAnswersService = async (
 
   let finishedStep;
   if (answeredQuestions.length >= MIN_CORRECT_ANSWERS) {
-    for (let obj of answeredQuestions) {
+    for (const obj of answeredQuestions) {
       await userAnswerdQuestionsRepository.save(obj);
     }
     finishedStep = userFinishedStepRepository.create({
@@ -76,7 +76,7 @@ export const checkStepAnswersService = async (
   return result;
 };
 
-const stepFinishedInTime = async (userId, finishedTime) => {
+const stepFinishedInTime = async (userId: number, finishedTime) => {
   const userStepsLogRepository = getCustomRepository(UserStepsLogRepository);
 
   const stepLog = await userStepsLogRepository.findOne({
@@ -107,9 +107,9 @@ const checkQuestionsAnswers = async (
   }
 
   const answeredQuestions = [];
-  for (let answer of answers) {
+  for (const answer of answers) {
     const { questionId, optionAnswer } = answer;
-    let questionAnswer = await getQuestionAnswer({ questionId });
+    const questionAnswer = await getQuestionAnswer({ questionId });
     if (!questionAnswer) {
       throw new Error("Question not found!");
     }
@@ -136,7 +136,7 @@ const giveUserRewards = async (userId, rewards) => {
   const userHasRewards = [];
   const userHasRewardRepository = getCustomRepository(UserHasRewardRepository);
 
-  for (let reward of rewards) {
+  for (const reward of rewards) {
     const userHasReward = userHasRewardRepository.create({
       userId,
       rewardId: reward.id,

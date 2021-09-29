@@ -3,7 +3,7 @@ import { getCustomRepository } from "typeorm";
 import { UserFinishedStepRepository } from "../repositories/UserFinishedStepRepository";
 import { UserStepsLogRepository } from "../repositories/UserStepsLogRepository";
 
-export const startStepService = async (userId, stepId) => {
+export const startStepService = async (userId: number, stepId: number) => {
   const userStepsLogRepository = getCustomRepository(UserStepsLogRepository);
   const userFinishedStepRepository = getCustomRepository(
     UserFinishedStepRepository

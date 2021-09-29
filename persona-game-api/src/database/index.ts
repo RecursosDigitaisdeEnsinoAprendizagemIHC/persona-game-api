@@ -1,6 +1,6 @@
 import { createConnection } from "typeorm";
 
-const connection = createConnection({
+createConnection({
   type: "mysql",
   host: "172.17.0.1",
   port: parseInt(process.env.MYSQL_TCP_PORT),

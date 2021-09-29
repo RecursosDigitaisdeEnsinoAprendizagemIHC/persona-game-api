@@ -20,7 +20,7 @@ export const getStepRewardService = async (stepId) => {
   const step = await stepRepository.findStepWithPhase(stepId);
   const phaseStep = `${step.phase.number}:${step.number}`;
 
-  for (let rewardName of REWARD_BY_STEP[phaseStep]) {
+  for (const rewardName of REWARD_BY_STEP[phaseStep]) {
     const reward = await rewardRepository.findOne({ name: rewardName });
     rewards.push({ reward, level: null });
   }

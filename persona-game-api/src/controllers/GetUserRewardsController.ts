@@ -4,7 +4,7 @@ import { getUserRewardsService } from "../services/GetUserRewardsService";
 export class GetUserRewardsController {
   async handle(request: Request, response: Response) {
     const { userId } = request;
-    const userRewards = await getUserRewardsService(userId);
+    const userRewards = await getUserRewardsService(parseInt(userId));
 
     return response.json(userRewards);
   }
