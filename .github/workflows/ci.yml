@@ -3,21 +3,15 @@ name: CI
 on: [push]
 
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  pipeline:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
+        
+      - name: Run build
+        run: |
+          docker-compose --file docker-compose.yml build
           
-      - name: Install dependencies
-        run: npm install
-      
-      - name: ESLint
-        run: npm run lint
+      - name: Run ESLint
+        run: docker-compose --file docker-compose.yml run persona-game-api yarn lint
