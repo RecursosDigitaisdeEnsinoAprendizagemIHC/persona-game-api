@@ -1,0 +1,27 @@
+name: CI
+
+on: [push]
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Create envfile
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_MYSQL_ROOT_PASSWORD: somepass
+          envkey_MYSQL_DATABASE: persona-game-db
+          envkey_MYSQL_TCP_PORT: 5432
+          envkey_AUTH_SECRET: somesecret
+          envkey_GAMES_QA_ENDPOINT: ""
+          file_name: .env
+        
+      - name: Run build
+        run: |
+          docker-compose --file docker-compose.yml build
+          
+      - name: Run ESLint
+        run: docker-compose --file docker-compose.yml run persona-game-api yarn lint
