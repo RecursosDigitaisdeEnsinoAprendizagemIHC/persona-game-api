@@ -7,7 +7,7 @@ export class StartStepController {
     const { userId } = request;
     const stepId = request.params.id;
 
-    await startStepService(userId, stepId);
+    await startStepService(parseInt(userId), parseInt(stepId));
     const questions = await getStepQuestionsService(userId, stepId);
 
     return response.json(questions);
