@@ -63,7 +63,7 @@ export const checkStepAnswersService = async (
     result.success = true;
 
     // check if a reward should be sent
-    const userRewards = await getStepRewardService(stepId);
+    const userRewards = await getStepRewardService(userId, stepId);
     result.rewards = userRewards;
     await giveUserRewards(userId, userRewards);
   }
