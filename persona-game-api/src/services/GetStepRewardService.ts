@@ -4,6 +4,9 @@ import { Reward } from "../entities/Reward";
 import { RewardRepository } from "../repositories/RewardRepository";
 import { StepRepository } from "../repositories/StepRepository";
 import { UserHasRewardRepository } from "../repositories/UserHasRewardRepository";
+import { notFoundError } from "./helpers/erros";
+import { success } from "./helpers/success";
+import { ServiceResponseInterface } from "./protocols/ServiceResponseInterface";
 
 const REWARD_BY_STEP = {
   "1:1": ["Identidade"],
@@ -14,12 +17,15 @@ const REWARD_BY_STEP = {
   "2:3": ["Requisitos", "Expectativas"],
 };
 
-export const getStepRewardService = async (userId, stepId) => {
+export const getStepRewardService = async (userId, stepId): Promise<ServiceResponseInterface> => {
   const rewardRepository = getCustomRepository(RewardRepository);
   const stepRepository = getCustomRepository(StepRepository);
 
   const rewards = [];
   const step = await stepRepository.findStepWithPhase(stepId);
+  if(!step){
+    return notFoundError('Passo');
+  }
   const phaseStep = `${step.phase.number}:${step.number}`;
 
   for (const rewardName of REWARD_BY_STEP[phaseStep]) {
@@ -28,7 +34,7 @@ export const getStepRewardService = async (userId, stepId) => {
     rewards.push({ reward, level: null });
   }
 
-  return rewards;
+  return success(rewards);
 };
 
 const updateUserHasReward = async (userId: number, reward: Reward) => {

@@ -7,6 +7,8 @@ import { QuestionComboRepository } from "../repositories/QuestionComboRepository
 import { RewardRepository } from "../repositories/RewardRepository";
 import { StepComboRepository } from "../repositories/StepComboRepository";
 import { UserHasRewardRepository } from "../repositories/UserHasRewardRepository";
+import { success } from "./helpers/success";
+import { ServiceResponseInterface } from "./protocols/ServiceResponseInterface";
 
 // if set difficulty, change this
 const MINUTES_TO_FINISH_STEP = 5;
@@ -14,7 +16,7 @@ const MINUTES_TO_FINISH_STEP = 5;
 export const getMedalRewardService = async (
   userId,
   finishedStep: UserFinishedStep
-) => {
+): Promise<ServiceResponseInterface> => {
   const rewards = [];
 
   const timeReward = await getAnswerTimeReward(userId, finishedStep);
@@ -32,7 +34,7 @@ export const getMedalRewardService = async (
     rewards.push(stepComboReward);
   }
 
-  return rewards;
+  return success(rewards);
 };
 
 const getAnswerTimeReward = async (userId, finishedStep) => {

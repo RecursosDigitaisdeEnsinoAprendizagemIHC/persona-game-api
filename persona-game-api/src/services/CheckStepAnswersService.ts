@@ -10,6 +10,8 @@ import { getStepRewardService } from "./GetStepRewardService";
 import { QuestionComboRepository } from "../repositories/QuestionComboRepository";
 import { StepComboRepository } from "../repositories/StepComboRepository";
 import { getMedalRewardService } from "./GetMedalRewardService";
+import { ServiceResponseInterface } from "./protocols/ServiceResponseInterface";
+import { success } from "./helpers/success";
 
 interface IAnswer {
   questionId: number;
@@ -24,7 +26,7 @@ export const checkStepAnswersService = async (
   userId: number,
   stepId: number,
   answers: IAnswer[]
-) => {
+):Promise<ServiceResponseInterface> => {
   const userFinishedStepRepository = getCustomRepository(
     UserFinishedStepRepository
   );
@@ -40,7 +42,7 @@ export const checkStepAnswersService = async (
   // check time to finish
   const finishedTime = moment();
   const finishedInTime = await stepFinishedInTime(userId, finishedTime);
-  if (!finishedInTime.success) return result;
+  if (!finishedInTime.success) return success(result);
 
   const answeredQuestions = await checkQuestionsAnswers(
     userId,
@@ -73,7 +75,7 @@ export const checkStepAnswersService = async (
   const medalRewards = await getMedalRewardService(userId, finishedStep);
   result.rewards = [...result.rewards, ...medalRewards];
 
-  return result;
+  return success(result);
 };
 
 const stepFinishedInTime = async (userId: number, finishedTime) => {
