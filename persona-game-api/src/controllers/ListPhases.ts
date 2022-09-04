@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { listPhasesService } from "../services/ListPhases";
+import { makeResponse } from "./helpers/makeResponse";
 
 export class ListPhasesController {
   async handle(request: Request, response: Response) {
     const phases = await listPhasesService();
-
-    return response.json(phases);
+    return makeResponse(response, phases);
   }
 }

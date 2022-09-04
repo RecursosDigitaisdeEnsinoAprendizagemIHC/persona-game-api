@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { checkStepAnswersService } from "../services/CheckStepAnswersService";
+import { makeResponse } from "./helpers/makeResponse";
 
 export class CheckStepAnswersController {
   async handle(request: Request, response: Response) {
@@ -11,7 +12,6 @@ export class CheckStepAnswersController {
       stepId,
       answers
     );
-
-    return response.json(stepResult);
+    return makeResponse(response,stepResult);
   }
 }

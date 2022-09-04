@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { checkQuestionAnswerService } from "../services/CheckQuestionAnswerService";
+import { makeResponse } from "./helpers/makeResponse";
 
 export class CheckQuestionAnswerController {
   async handle(request: Request, response: Response) {
@@ -11,6 +12,6 @@ export class CheckQuestionAnswerController {
       answerSent
     );
 
-    return response.json(questionAnswer);
+    return makeResponse(response, questionAnswer);
   }
 }

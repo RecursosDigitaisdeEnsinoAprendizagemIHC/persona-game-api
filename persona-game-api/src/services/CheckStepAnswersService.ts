@@ -12,6 +12,7 @@ import { StepComboRepository } from "../repositories/StepComboRepository";
 import { getMedalRewardService } from "./GetMedalRewardService";
 import { ServiceResponseInterface } from "./protocols/ServiceResponseInterface";
 import { success } from "./helpers/success";
+import { serverError } from "./helpers/erros";
 
 interface IAnswer {
   questionId: number;
@@ -27,55 +28,61 @@ export const checkStepAnswersService = async (
   stepId: number,
   answers: IAnswer[]
 ):Promise<ServiceResponseInterface> => {
-  const userFinishedStepRepository = getCustomRepository(
-    UserFinishedStepRepository
-  );
-  const userAnswerdQuestionsRepository = getCustomRepository(
-    UserAnsweredQuestionsRepository
-  );
-
-  const result = {
-    success: false,
-    rewards: [],
-  };
-
-  // check time to finish
-  const finishedTime = moment();
-  const finishedInTime = await stepFinishedInTime(userId, finishedTime);
-  if (!finishedInTime.success) return success(result);
-
-  const answeredQuestions = await checkQuestionsAnswers(
-    userId,
-    answers,
-    userAnswerdQuestionsRepository
-  );
-
-  let finishedStep;
-  if (answeredQuestions.length >= MIN_CORRECT_ANSWERS) {
-    for (const obj of answeredQuestions) {
-      await userAnswerdQuestionsRepository.save(obj);
-    }
-    finishedStep = userFinishedStepRepository.create({
-      stepId,
+  try {
+    const userFinishedStepRepository = getCustomRepository(
+      UserFinishedStepRepository
+    );
+    const userAnswerdQuestionsRepository = getCustomRepository(
+      UserAnsweredQuestionsRepository
+    );
+  
+    const result = {
+      success: false,
+      rewards: [],
+    };
+  
+    // check time to finish
+    const finishedTime = moment();
+    const finishedInTime = await stepFinishedInTime(userId, finishedTime);
+    if (!finishedInTime.success) return success(result);
+  
+    const answeredQuestions = await checkQuestionsAnswers(
       userId,
-      time_to_finish: finishedInTime.timeToFinish,
-    });
-    await userFinishedStepRepository.save(finishedStep);
-
-    result.success = true;
-
-    // check if a reward should be sent
-    const userRewards = await getStepRewardService(userId, stepId);
-    result.rewards = userRewards;
-    await giveUserRewards(userId, userRewards);
+      answers,
+      userAnswerdQuestionsRepository
+    );
+  
+    let finishedStep;
+    if (answeredQuestions.length >= MIN_CORRECT_ANSWERS) {
+      for (const obj of answeredQuestions) {
+        await userAnswerdQuestionsRepository.save(obj);
+      }
+      finishedStep = userFinishedStepRepository.create({
+        stepId,
+        userId,
+        time_to_finish: finishedInTime.timeToFinish,
+      });
+      await userFinishedStepRepository.save(finishedStep);
+  
+      result.success = true;
+  
+      // check if a reward should be sent
+      const userRewards = await (await getStepRewardService(userId, stepId)).data;
+      result.rewards = userRewards;
+      await giveUserRewards(userId, userRewards);
+      
+    }
+  
+    await updateStepCombo(userId, result.success);
+  
+    const medalRewards = await (await getMedalRewardService(userId, finishedStep)).data;
+    result.rewards = [...result.rewards, ...medalRewards];
+  
+    return success(result);
+  } catch (error) {
+    return serverError()
   }
-
-  await updateStepCombo(userId, result.success);
-
-  const medalRewards = await getMedalRewardService(userId, finishedStep);
-  result.rewards = [...result.rewards, ...medalRewards];
-
-  return success(result);
+  
 };
 
 const stepFinishedInTime = async (userId: number, finishedTime) => {

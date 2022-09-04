@@ -11,7 +11,7 @@ export const authUserService = async (userId: number): Promise<ServiceResponseIn
     const userRepository = getCustomRepository(UserRepository);
     const now = moment().format("YYYY-MM-DD hh:mm:ss");
     await userRepository.update(userId, { last_login: now });
-    return success({})
+    return success({ success: true })
   } catch (error) {
     return updateError('usuário')
   }

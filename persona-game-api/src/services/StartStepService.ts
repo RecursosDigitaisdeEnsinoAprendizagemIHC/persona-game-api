@@ -2,6 +2,8 @@ import { getCustomRepository } from "typeorm";
 
 import { UserFinishedStepRepository } from "../repositories/UserFinishedStepRepository";
 import { UserStepsLogRepository } from "../repositories/UserStepsLogRepository";
+import { notFoundError } from "./helpers/erros";
+import { success } from "./helpers/success";
 
 export const startStepService = async (userId: number, stepId: number) => {
   const userStepsLogRepository = getCustomRepository(UserStepsLogRepository);
@@ -13,7 +15,7 @@ export const startStepService = async (userId: number, stepId: number) => {
     userId
   );
   if (lastFinishedStep && stepId > lastFinishedStep.stepId + 1) {
-    throw new Error("You don't have this step unlocked yet!");
+    return notFoundError('Passos')
   }
 
   await userStepsLogRepository.update({ userId }, { current_step: false });
@@ -25,4 +27,5 @@ export const startStepService = async (userId: number, stepId: number) => {
   });
 
   await userStepsLogRepository.save(user);
+  return success({success: 'ok'})
 };

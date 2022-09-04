@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getStepQuestionsService } from "../services/GetStepQuestionsService";
 import { startStepService } from "../services/StartStepService";
+import { makeResponse } from "./helpers/makeResponse";
 
 export class StartStepController {
   async handle(request: Request, response: Response) {
@@ -9,7 +10,6 @@ export class StartStepController {
 
     await startStepService(parseInt(userId), parseInt(stepId));
     const questions = await getStepQuestionsService(userId, stepId);
-
-    return response.json(questions);
+    return makeResponse(response, questions);
   }
 }
