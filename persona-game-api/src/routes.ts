@@ -26,6 +26,12 @@ router.post("/users", createUserController.handle);
 
 // Authenticated routes
 router.post("/login", ensureAuthenticated, authUserController.handle);
+
+router.get(
+  "/preferences",
+  ensureAuthenticated,
+  getUserPreferencesController.handle
+);
 router.get("/phases", ensureAuthenticated, listPhasesController.handle);
 router.get(
   "/finished_steps",
