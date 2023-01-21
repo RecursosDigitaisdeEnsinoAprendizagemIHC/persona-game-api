@@ -9,6 +9,8 @@ import { CheckQuestionAnswerController } from "./controllers/CheckQuestionAnswer
 import { CheckStepAnswersController } from "./controllers/CheckStepAnswersController";
 import { ListRewardsController } from "./controllers/ListRewardsController";
 import { GetUserRewardsController } from "./controllers/GetUserRewardsController";
+import { GetUserPreferencesController } from "./controllers/GetUserPreferencesController";
+import { UpdatePreferenceTypeController } from "./controllers/UpdatePreferenceTypeController";
 
 export const router = Router();
 
@@ -21,6 +23,8 @@ const startStepController = new StartStepController();
 const checkQuestionAnswerController = new CheckQuestionAnswerController();
 const checkStepAnswersController = new CheckStepAnswersController();
 const getUserRewardsController = new GetUserRewardsController();
+const getUserPreferencesController = new GetUserPreferencesController();
+const updatePreferenceTypeController = new UpdatePreferenceTypeController();
 
 router.post("/users", createUserController.handle);
 
@@ -32,7 +36,14 @@ router.get(
   ensureAuthenticated,
   getUserPreferencesController.handle
 );
+router.put(
+  "/preference_type/:id",
+  ensureAuthenticated,
+  updatePreferenceTypeController.handle
+);
+
 router.get("/phases", ensureAuthenticated, listPhasesController.handle);
+
 router.get(
   "/finished_steps",
   ensureAuthenticated,
@@ -44,10 +55,12 @@ router.post(
   ensureAuthenticated,
   checkStepAnswersController.handle
 );
+
 router.get(
   "/question/:id/check",
   ensureAuthenticated,
   checkQuestionAnswerController.handle
 );
+
 router.get("/rewards", ensureAuthenticated, listRewardsController.handle);
 router.get("/my_rewards", ensureAuthenticated, getUserRewardsController.handle);
