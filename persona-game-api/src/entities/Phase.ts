@@ -4,7 +4,7 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from "typeorm";
 
 import { Step } from "./Step";
@@ -19,6 +19,9 @@ export class Phase {
 
   @Column()
   description: string;
+
+  @Column()
+  conclusion: string;
 
   @Column()
   number: number;
