@@ -13,6 +13,7 @@ createConnection({
     migrationsDir: "src/database/migrations",
     entitiesDir: "src/entities",
   },
+  migrationsRun: true
 })
   .then(() => {
     console.log("Connected to the database");
