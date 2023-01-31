@@ -20,7 +20,7 @@ export class CreateUserPreferences1674152970478 implements MigrationInterface {
                 {
                     name: "name",
                     type: "varchar",
-                    default: "Padrão"
+                    default: "'Padrão'"
                 },
                 {
                     name: "created_at",

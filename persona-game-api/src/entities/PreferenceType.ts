@@ -15,8 +15,8 @@ export class PreferenceType {
   @PrimaryGeneratedColumn("increment")
   readonly id: number;
 
-  @Column()
-  user_preference_id: number;
+  @Column({ name: "user_preference_id" })
+  userPreferenceId: number;
 
   @JoinColumn({ name: "user_preference_id" })
   @ManyToOne(() => UserPreferences, (userPreference) => userPreference.preferenceTypes)
