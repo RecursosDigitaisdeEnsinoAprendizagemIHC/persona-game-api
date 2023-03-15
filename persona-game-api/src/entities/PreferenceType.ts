@@ -25,6 +25,12 @@ export class PreferenceType {
   @Column()
   name: string;
 
+  @Column({ name: "input_type" })
+  inputType: string;
+
+  @Column({nullable: true})
+  options: string | null;
+
   @Column()
   value: string;
 

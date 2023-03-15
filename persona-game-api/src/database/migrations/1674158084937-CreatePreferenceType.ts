@@ -26,6 +26,16 @@ export class CreatePreferenceType1674158084937 implements MigrationInterface {
                     type: "varchar"
                 },
                 {
+                    name: "input_type",
+                    type: "varchar"
+                },
+                {
+                    name: "options",
+                    type: "varchar",
+                    isNullable: true,
+                    default: null
+                },
+                {
                     name: "created_at",
                     type: "timestamp",
                     default: "now()"
